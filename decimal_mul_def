@@ -1,0 +1,63 @@
+-----------------------------------------------------------------------------------------------------
+			DEFINITION  FOR  MULTIPLICATION  OF  DECIMAL NUMERALS
+-----------------------------------------------------------------------------------------------------
+
+Assumption: Decimal Numeral is Valid 
+
+
+# Multiplication of Natural Numbers
+ 
+mul_natural(f(x), f(Z)) ≡ f(x)
+mul_natural(Z, f(Z)) ≡ Z
+mul_natural(f(x), Z) ≡ Z
+mul_natural(f(x), f(y)) ≡ add(f(x), mul_natural(f(x), y))
+
+-----------------------------------------------------------------------------------------------------
+
+# Decimal digit to equivalent Natural number 
+
+map(a) ≡ k --> (
+			((a ≡ d0) --> (k ≡ Z)) V
+			((a ≡ d1) --> (k ≡ f(Z))) V
+			((a ≡ d2) --> (k ≡ f(f(Z)))) V
+			((a ≡ d3) --> (k ≡ f(f(f(Z))))) V
+			((a ≡ d4) --> (k ≡ f(f(f(f(Z)))))) V
+			((a ≡ d5) --> (k ≡ f(f(f(f(f(Z))))))) V
+			((a ≡ d6) --> (k ≡ f(f(f(f(f(f(Z)))))))) V
+			((a ≡ d7) --> (k ≡ f(f(f(f(f(f(f(Z))))))))) V
+			((a ≡ d8) --> (k ≡ f(f(f(f(f(f(f(f(Z)))))))))) V
+			((a ≡ d9) --> (k ≡ f(f(f(f(f(f(f(f(f(Z)))))))))))
+		)
+
+-----------------------------------------------------------------------------------------------------
+
+# Function to calculate exponent of 10 
+
+pow(Z) ≡ f(Z)
+pow(n) ≡ mul_natural(f(map(d9)), pow(sub(n,f(Z))))
+
+-----------------------------------------------------------------------------------------------------
+
+# Decimal digit along with exponent to its value in Natural number
+
+
+value(K) ≡ x --> (
+			(a,b) ∈ K   &&
+			(x ≡ mul_natural(map(a), pow(b)))
+	       	   )
+
+-----------------------------------------------------------------------------------------------------
+
+# Decimal Numeral to Natural Number conversion
+ 
+decimalToNatural(ds) ≡ m --> (
+				(a U b) ≡ ds ((a n b) ≡ {} && |a| = 1) &&  
+				(m ≡ add(value(a), decimalToNatural(b)))
+		  	     )
+
+-----------------------------------------------------------------------------------------------------
+
+# Multiplication of Decimal Numerals
+
+mul_decimal(ds1, ds2) ≡ mul_natural(decimalToNatural(ds1), decimalToNatural(ds2))
+
